@@ -37,9 +37,9 @@ jobs:
     - name: Run migrations
       run: npx sequelize-cli db:migrate
       env:
-        DB_HOST: localhost
+        DB_HOST: postgres
         DB_USER: postgres
-        DB_PASSWORD: ''
+        DB_PASSWORD: root
         DB_NAME: db_bms
     
     - name: Run tests
