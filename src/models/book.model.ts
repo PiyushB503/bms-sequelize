@@ -1,7 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "../database/db";
-import { Author } from "./authorModel";
-import { Category } from "./categoryModel";
+import { Author } from "./author-model";
+import { Category } from "./category.model";
 
 export class Books extends Model {}
 

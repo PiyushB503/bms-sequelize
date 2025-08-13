@@ -1,4 +1,4 @@
-import { Category } from "../models/categoryModel";
+import { Category } from "../models/category.model";
 import { sequelize } from "../database/db";
 
 export class CategoryService {

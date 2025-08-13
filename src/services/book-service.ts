@@ -1,6 +1,6 @@
-import { Books } from "../models/bookModel";
-import { Author } from "../models/authorModel";
-import { Category } from "../models/categoryModel";
+import { Books } from "../models/book.model";
+import { Author } from "../models/author-model";
+import { Category } from "../models/category.model";
 import { sequelize } from "../database/db";
 
 export class BookService {

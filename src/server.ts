@@ -2,9 +2,9 @@ import express, { Application, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { dbConnect, sequelize } from './database/db';  // Import db connection
 import './association/association';  // Import associations
-import bookRouter from "./routes/bookRoute";
-import authorRouter from './routes/authorRoute';
-import categoryRouter from './routes/categoryRoute';
+import bookRouter from "./routes/book-route";
+import authorRouter from './routes/author-route';
+import categoryRouter from './routes/category-route';
 import expressStatusMonitor from 'express-status-monitor';
 
 dotenv.config();

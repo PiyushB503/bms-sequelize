@@ -1,5 +1,5 @@
 import { sequelize } from "../database/db";
-import { Author } from "../models/authorModel";
+import { Author } from "../models/author-model";
 
 export class AuthorService {
     async getAllAuthors(): Promise<Author[]> {

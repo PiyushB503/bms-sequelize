@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Author } from "../models/authorModel";
+import { Author } from "../models/author-model";
 import { sequelize } from "../database/db";
 import { AuthorService } from "../services/author-service";
 

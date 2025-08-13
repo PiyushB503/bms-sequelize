@@ -1,6 +1,6 @@
-import { Author } from "../models/authorModel";
-import { Books } from "../models/bookModel";
-import { Category } from "../models/categoryModel";
+import { Author } from "../models/author-model";
+import { Books } from "../models/book.model";
+import { Category } from "../models/category.model";
 
 
 Author.hasMany(Books, { foreignKey: "authorId", onDelete: "CASCADE" });

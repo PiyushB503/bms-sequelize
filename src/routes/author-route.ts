@@ -3,9 +3,9 @@ import {
   getAllAuthor,
   createAuthor,
   deleteAuthor
-} from "../controllers/authorController";
+} from "../controllers/author-controller";
 import { createAuthorValidator, deleteAuthorValidator } from "../validators/author-validator";
-import { validate } from "../middlewares/validateMiddleware";
+import { validate } from "../middlewares/validate-middleware";
 const router = express.Router();
 
 router.get("/getAllAuthor", getAllAuthor);

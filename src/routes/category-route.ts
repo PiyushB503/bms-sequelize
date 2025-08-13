@@ -3,8 +3,8 @@ import {
   createCategory,
   deleteCategory,
   getAllCategories
-} from "../controllers/categoryController";
-import { validate } from "../middlewares/validateMiddleware";
+} from "../controllers/category-controller";
+import { validate } from "../middlewares/validate-middleware";
 import { createCategoryValidator, deleteCategoryValidator } from "../validators/category-validator";
 const router = express.Router();
 
