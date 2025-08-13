@@ -1,97 +1,77 @@
 import { Request, Response } from "express";
-import { Category } from "../models/categoryModel";
+import { CategoryService } from "../services/category-service";
 
-export const getAllCategory = async (req: Request, res: Response) => {
+const categoryService = new CategoryService();
+
+
+export const getAllCategories = async (req: Request, res: Response): Promise<void> => {
   try {
-    const categorys = await Category.findAll();
+    const categories = await categoryService.getAllCategories();
 
-    if (!categorys) {
-      res.status(400).json({
-        message: "Categorys not found in the DB",
+    if (!categories.length) {
+      res.status(404).json({
+        message: "No categories found in the DB",
       });
       return;
     }
 
-    res.status(200).json(categorys);
+    res.status(200).json(categories);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error while fetching all Categorys", error });
-  }
-}
-
-export const createCategory = (req: Request, res: Response) => {
-  try {
-    const { name } = req.body;
-
-    if (!name) {
-      res.status(400).json({ message: "All fields are required" });
-    }
-    const category = Category.create({ name });
-
-    if (!category) {
-      res.status(400).json({ mesasge: "Category not created" });
-      return;
-    }
- 
-    res
-      .status(201)
-      .json({ message: "Category created successfully", category });
-  } catch (error) {
-    res.status(500).json({ message: "Error while creating a Book", error });
+    res.status(500).json({
+      message: "Error while fetching all categories",
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 };
 
-export const updateCategory = async (req: Request, res: Response) => {
+
+export const createCategory = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name } = req.body;
+    const { body: {name} } = req;
 
     if (!name) {
-      res.status(400).json({ message: "Name are required" });
+      res.status(400).json({ message: "Category name is required" });
+      return
     }
 
-    const categoryId = req.params.id;
-
-    if (!categoryId) {
-      res.status(400).json({ message: "invalid Category id" });
+    const newCategory = await categoryService.createCategory({ name });
+    if (!newCategory) {
+      res.status(400).json({ message: "Category not created" });
+      return
     }
-
-    const category = await Category.findByPk(categoryId);
-
-    if (!category) {
-      res.status(400).json({ mesasge: "Category not found" });
-      return;
-    }
-
-    const updatedCategory = await category.update({ name });
-    res
-      .status(201)
-      .json({ message: "Category updated successfully", updatedCategory });
+    res.status(201).json({
+      message: "Category created successfully",
+      category: newCategory,
+    });
   } catch (error) {
-    res.status(500).json({ message: "Error while updating a Category", error });
+    res.status(500).json({
+      message: "Error while creating category",
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 };
 
-export const deleteCategory = async (req: Request, res: Response) => {
+
+export const deleteCategory = async (req: Request, res: Response): Promise<void> => {
   try {
-    const categoryId = req.params.id;
+    const { params: { id: categoryId } } = req;
 
     if (!categoryId) {
-      res.status(400).json({ message: "invalid Category id" });
-    }
-
-    const category = await Category.findByPk(categoryId);
-
-    if (!category) {
-      res.status(400).json({
-        message: "Category not found",
-      });
+      res.status(400).json({ message: "Invalid category ID" });
       return;
     }
 
-    await category.destroy();
-    res.status(200).json({ message: "Category delete successfully" });
+    const isDeleted = await categoryService.deleteCategory(categoryId);  // Delete category using the service
+
+    if (isDeleted) {
+      res.status(200).json({ message: "Category deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Category not found" });
+    }
   } catch (error) {
-    res.status(500).json({ message: "Error while deleting a Category", error });
+    res.status(500).json({
+      message: "Error while deleting category",
+      error: error instanceof Error ? error.message : String(error),
+    });
   }
 };

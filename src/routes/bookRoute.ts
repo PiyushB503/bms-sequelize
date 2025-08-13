@@ -1,10 +1,12 @@
 import express from "express";
 import { createBook, getAllBooks, deleteBook } from "../controllers/bookController";
+import { validate } from "../middlewares/validateMiddleware";
+import { createBookValidator, deleteBookValidator } from "../validators/book-validator";
 
 const router = express.Router();
 
-router.post("/createBook", createBook);
 router.get("/getAllBooks", getAllBooks);
-router.delete("/deleteBook/:id", deleteBook);
+router.post("/", validate(createBookValidator), createBook);
+router.delete("/:id", validate(deleteBookValidator), deleteBook);
 
 export default router;

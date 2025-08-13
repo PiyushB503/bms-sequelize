@@ -3,9 +3,9 @@ import { sequelize } from "../database/db";
 import { Author } from "./authorModel";
 import { Category } from "./categoryModel";
 
-export class Book extends Model {}
+export class Books extends Model {}
 
-Book.init(
+Books.init(
   {
     id: {
       type: DataTypes.INTEGER,

@@ -1,10 +1,10 @@
 import { Author } from "../models/authorModel";
-import { Book } from "../models/bookModel";
+import { Books } from "../models/bookModel";
 import { Category } from "../models/categoryModel";
 
 
-Author.hasMany(Book, { foreignKey: "authorId", onDelete: "CASCADE" });
-Book.belongsTo(Author, { foreignKey: "authorId" });
+Author.hasMany(Books, { foreignKey: "authorId", onDelete: "CASCADE" });
+Books.belongsTo(Author, { foreignKey: "authorId" });
 
-Category.hasMany(Book, { foreignKey: "categoryId", onDelete: "CASCADE" });
-Book.belongsTo(Category, { foreignKey: "categoryId" });
+Category.hasMany(Books, { foreignKey: "categoryId", onDelete: "CASCADE" });
+Books.belongsTo(Category, { foreignKey: "categoryId" });

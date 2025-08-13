@@ -1,10 +1,15 @@
 import { Request, Response } from "express";
 import { Author } from "../models/authorModel";
+import { sequelize } from "../database/db";
+import { AuthorService } from "../services/author-service";
 
-export const getAllAuthor = async (req: Request, res: Response) => {
+const authorService = new AuthorService();
+
+export const getAllAuthor = async (req: Request, res: Response): Promise<void> => {
   try {
-    const authors = await Author.findAll();
-    if (!authors) {
+    const authors = await authorService.getAllAuthors();
+
+    if (!authors.length) {
       res.status(400).json({
         message: "Authors not found in the DB",
       });
@@ -15,49 +20,55 @@ export const getAllAuthor = async (req: Request, res: Response) => {
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error while fetching all Authors", error });
+      .json({ message: "Error while fetching all Authors", error: error instanceof Error ? error.message : String(error), });
   }
 };
 
-export const createAuthor = async (req: Request, res: Response) => {
+export const createAuthor = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name } = req.body;
+    const { body : {name} } = req;
 
     if (!name) {
-      res.status(400).json({ message: "All fields are required" });
+      res.status(400).json({ message: "Author name is required" });
+      return
     }
 
-    const author = await Author.create({ name });
+    const newAuthor = await authorService.createAuthor({ name });
 
-    if (!author) {
+    if (!newAuthor) {
       res.status(400).json({ message: "Author not created" });
+      return
     }
 
-    res.status(201).json({ message: "Author created successfully", author });
+
+    res.status(201).json({ message: "Author created successfully", author: newAuthor });
   } catch (error) {
-    res.status(500).json({ message: "Error while creating a Author", error });
+
+    res.status(500).json({ message: "Error while creating a Author", error: error instanceof Error ? error.message : String(error), });
   }
 };
 
-export const deleteAuthor = async (req: Request, res: Response) => {
+export const deleteAuthor = async (req: Request, res: Response): Promise<void> => {
   try {
-    const authorId = req.params.id;
+    const { params: { id : authorId } } = req;
 
     if (!authorId) {
+
       res.status(400).json({ message: "invalid Author id" });
+      return
     }
 
-    const author = await Author.findByPk(authorId);
+    const isDeleted = await authorService.deleteAuthor(authorId);
 
-    if (!author) {
+    if (isDeleted) {
+      res.status(200).json({ message: "Author deleted successfully" });
+    } else {
       res.status(400).json({
         message: "Author not found",
       });
       return;
     }
-    await author.destroy();
-    res.status(200).json({ message: "Author delete successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Error while deleting a Author", error });
+    res.status(500).json({ message: "Error while deleting a Author", error: error instanceof Error ? error.message : String(error), });
   }
 };
